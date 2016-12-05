@@ -1,0 +1,53 @@
+html {
+	position: relative;
+	min-height: 100%;
+}
+body {
+	margin-bottom: 120px !important;
+}
+
+h1{
+	margin: 1em;
+}
+.row{
+	margin: 1em;
+	border: solid 0.1em gray;
+}
+.row-item{
+	border: none;
+}
+img{
+	margin: 0.5em; 
+}
+.btn-primary{
+	color: white;
+	text-decoration: none;
+}
+.btn{
+	margin: 1em;
+}
+.logo{
+	padding: 3% 0;
+}
+.name{
+	font-weight: 500;
+	font-size: 3em;
+}
+.namef{
+	font-weight: bold;
+}
+.ss{
+	text-decoration: none;
+	color: cornflowerblue;
+}
+.table{
+	margin: 5% 0;
+}
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 120px;
+	background-color: gray;
+	color: white;
+}
