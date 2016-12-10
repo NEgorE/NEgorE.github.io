@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Редактор табличных данных</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+		var load=0;
+		var mass = new Array(
+			 	{"lastname":"Neliubin","firstname":"Egor"},
+				{"lastname":"Nesterchuk","firstname":"Ilya"},
+				{"lastname":"Boris","firstname":"Ilya"}
+		);
+		
+		 function loaddata(working){
+			 
+			 var tbody = document.getElementById(working);
+			 
+			 if (load>0){
+				 for(k=0;k<mass.length+1;k++){
+					tbody.removeChild(document.getElementById("tr"+k));
+				 }
+			 }
+ 			 
+			 for(i=0;i<mass.length;i++){
+				 var trCR=document.createElement("tr");
+				 trCR.setAttribute("id","tr"+i);
+				 
+				 var tdLN=document.createElement("td");
+				 var tdFN=document.createElement("td");
+				 var firstN=document.createElement("input");
+				 var lastN=document.createElement("input");
+
+				 
+				 firstN.setAttribute("value", mass[i].firstname);
+				 firstN.setAttribute("id","f"+i+"f");
+				 firstN.setAttribute("readonly","true");
+				 lastN.setAttribute("value", mass[i].lastname);
+				 lastN.setAttribute("id","l"+i+"l");
+				 lastN.setAttribute("readonly","true");
+				 
+				 
+				 firstN.style.border="none";
+				 lastN.style.border="none";
+				 
+				 tdFN.appendChild(firstN);
+				 tdLN.appendChild(lastN);
+				 
+				 var delB=document.createElement("input");
+				 delB.setAttribute("type","button");
+				 delB.setAttribute("class","button");
+				 delB.setAttribute("id","butDel"+i);
+				 delB.setAttribute("value","Удалить");
+				 delB.setAttribute("onclick","delTR("+"'"+i+"'"+"); return false;");
+				 
+				 var editB=document.createElement("input");
+				 editB.setAttribute("type","button");
+				 editB.setAttribute("class","button");
+				 editB.setAttribute("id","butEdit"+i);
+				 editB.setAttribute("value","Изменить");
+				 editB.setAttribute("onclick","editTR("+"'"+i+"'"+"); return false;");
+
+				 trCR.appendChild(tdFN);
+				 trCR.appendChild(tdLN);
+				 trCR.appendChild(delB);
+				 trCR.appendChild(editB);
+				 
+				 tbody.appendChild(trCR);
+			 }
+			 
+			 var trADD=document.createElement("tr");
+			 trADD.setAttribute("id","tr"+mass.length);
+			 
+			 var tdAddLn=document.createElement("td");
+			 var tdAddFn=document.createElement("td");
+			 
+			 var firstNAdd=document.createElement("input");
+			 firstNAdd.setAttribute("id", "addFName");
+			 
+			 var lastNAdd=document.createElement("input");
+			 lastNAdd.setAttribute("id", "addLName");
+			 
+			 tdAddFn.appendChild(firstNAdd);
+			 tdAddLn.appendChild(lastNAdd);
+			 trADD.appendChild(tdAddFn);
+			 trADD.appendChild(tdAddLn);
+			 
+			 var addB=document.createElement("input");
+			 addB.setAttribute("type","button");
+			 addB.setAttribute("class","button");
+			 addB.setAttribute("id","addStr");
+			 addB.setAttribute("value","Добавить");
+			 addB.setAttribute("onclick","addStr("+mass.length+"); return false;");
+			 trADD.appendChild(addB);
+			 
+			 tbody.appendChild(trADD);
+			 
+			 
+			 load++;
+			 
+			 
+		 }
+		
+		function addStr(i){
+			var tbody = document.getElementById("workarea");	
+			var addFName=document.getElementById("addFName");
+			var addLName=document.getElementById("addLName");
+			var addFval=addFName.value;
+			var addLval=addLName.value;			
+			for(k=0;k<mass.length+1;k++){
+				tbody.removeChild(document.getElementById("tr"+k));
+			}
+			mass[mass.length]={"lastname":addFval,"firstname":addLval};		
+			load=0;
+			loaddata("workarea");
+		}
+		
+		function delTR(i){			
+			var tbody = document.getElementById("workarea");			
+			for(k=0;k<mass.length+1;k++){
+				tbody.removeChild(document.getElementById("tr"+k));
+			}
+			mass.splice(i,1);
+			load=0;
+			loaddata("workarea");	
+		}
+		
+		function editTR(i){
+			var str=document.getElementById("tr"+i);
+			str.removeChild(document.getElementById("butDel"+i));
+			str.removeChild(document.getElementById("butEdit"+i));
+			
+			var saveB=document.createElement("input");
+			saveB.setAttribute("type","button");
+			saveB.setAttribute("class","button");
+			saveB.setAttribute("id","butSave"+i);
+			saveB.setAttribute("value","Созранить");
+			saveB.setAttribute("onclick","saveCh("+"'"+i+"'"+"); return false;");
+			
+			var inpF=document.getElementById("f"+i+"f");
+			inpF.removeAttribute("readonly");
+			inpF.style.border="1px solid black";
+			
+			var inpL=document.getElementById("l"+i+"l");
+			inpL.removeAttribute("readonly");
+			inpL.style.border="1px solid black";
+			
+			str.appendChild(saveB);
+			
+		}
+		
+		function saveCh(i){
+			var tbody = document.getElementById("workarea");			
+			var editFN = document.getElementById("f"+i+"f");
+			var editLN = document.getElementById("l"+i+"l");
+			var valFN=editFN.value;
+			var valLN=editLN.value;
+			
+			for(k=0;k<mass.length+1;k++){
+				tbody.removeChild(document.getElementById("tr"+k));
+			}
+			
+			mass[i].firstname=valFN;
+			mass[i].lastname=valLN;
+			load=0;
+			loaddata("workarea");
+		}
+		
+	</script>
+   <h1>Редактор табличных данных</h1>
+    <div class="col-md-4">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Firstname</th>
+					<th>Lastanme</th>
+					<th><input type="button" value="Загрузить" class="button" onclick="loaddata('workarea'); return false;"></th>
+				</tr>
+			</thead>
+			<tbody id="workarea">
+				
+			</tbody>
+		</table>
+   </div>
+    <footer class="footer text-center">
+ 		Тестовое задание
+ 	</footer>
+  </body>
+</html>

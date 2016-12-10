@@ -23,6 +23,10 @@ img{
 	color: white;
 	text-decoration: none;
 }
+.btn-success{
+	color: white;
+	text-decoration: none;
+}
 .btn{
 	margin: 1em;
 }
@@ -50,4 +54,13 @@ img{
 	height: 120px;
 	background-color: gray;
 	color: white;
+}
+.inp{
+	border: none;
+}
+.one{
+	border: none;
+}
+.button{
+	margin: 2px;
 }
