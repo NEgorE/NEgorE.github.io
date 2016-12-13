@@ -44,9 +44,6 @@ img{
 	text-decoration: none;
 	color: cornflowerblue;
 }
-.table{
-	margin: 5% 0;
-}
 .footer {
 	position: absolute;
 	bottom: 0;
@@ -63,4 +60,10 @@ img{
 }
 .button{
 	margin: 2px;
+}
+.tbrow{
+	border: none;
+}
+.table{
+	max-height: 50%;
 }

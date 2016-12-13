@@ -6,7 +6,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
   </head>
-  <body>
+  <body class="text-center">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script>
@@ -58,6 +58,19 @@
 				 delB.setAttribute("value","Удалить");
 				 delB.setAttribute("onclick","delTR("+"'"+i+"'"+"); return false;");
 				 
+				 var upB=document.createElement("input");
+				 upB.setAttribute("type","button");
+				 upB.setAttribute("class","button");
+				 upB.setAttribute("id","butUp"+i);
+				 upB.setAttribute("value","Вверх");
+				 upB.setAttribute("onclick","upTR("+"'"+i+"'"+"); return false;");
+				 var downB=document.createElement("input");
+				 downB.setAttribute("type","button");
+				 downB.setAttribute("class","button");
+				 downB.setAttribute("id","butDown"+i);
+				 downB.setAttribute("value","Вниз");
+				 downB.setAttribute("onclick","downTR("+"'"+i+"'"+"); return false;");
+				 
 				 var editB=document.createElement("input");
 				 editB.setAttribute("type","button");
 				 editB.setAttribute("class","button");
@@ -67,6 +80,8 @@
 
 				 trCR.appendChild(tdFN);
 				 trCR.appendChild(tdLN);
+				 trCR.appendChild(upB);
+				 trCR.appendChild(downB);
 				 trCR.appendChild(delB);
 				 trCR.appendChild(editB);
 				 
@@ -106,6 +121,47 @@
 			 
 		 }
 		
+		function upTR(id){
+			var memF, memL;
+			if (id==0){
+				alert("Строка уже на первом месте!")
+			}else{
+				memF=mass[id-1].firstname;
+				memL=mass[id-1].lastname;
+				mass[id-1].firstname=mass[id].firstname;
+				mass[id-1].lastname=mass[id].lastname;
+				mass[id].firstname=memF;
+				mass[id].lastname=memL;
+			}
+			var tbody = document.getElementById("workarea");	
+			for(k=0;k<mass.length+1;k++){
+				tbody.removeChild(document.getElementById("tr"+k));
+			}		
+			load=0;
+			loaddata("workarea");
+		}
+		
+		function downTR(id){
+			var memF, memL;
+			if (id==mass.length-1){
+				alert("Строка уже находится на последнем месте!");
+			}else{
+				ll=parseInt(id);
+				memF=mass[ll+1].firstname;
+				memL=mass[ll+1].lastname;
+				mass[ll+1].firstname=mass[id].firstname;
+				mass[ll+1].lastname=mass[id].lastname;
+				mass[id].firstname=memF;
+				mass[id].lastname=memL;
+			}
+			var tbody = document.getElementById("workarea");	
+			for(k=0;k<mass.length+1;k++){
+				tbody.removeChild(document.getElementById("tr"+k));
+			}		
+			load=0;
+			loaddata("workarea");
+		}
+		
 		function addStr(i){
 			var tbody = document.getElementById("workarea");	
 			var addFName=document.getElementById("addFName");
@@ -115,7 +171,7 @@
 			for(k=0;k<mass.length+1;k++){
 				tbody.removeChild(document.getElementById("tr"+k));
 			}
-			mass[mass.length]={"lastname":addFval,"firstname":addLval};		
+			mass[mass.length]={"lastname":addLval,"firstname":addFval};		
 			load=0;
 			loaddata("workarea");
 		}
@@ -171,21 +227,77 @@
 			loaddata("workarea");
 		}
 		
+		function loaddataTA(textA){
+			var TA = document.getElementById(textA);
+			var text;
+			for (i=0;i<mass.length;i++){
+				if (i==0){
+					text=mass[i].lastname+" "+mass[i].firstname;
+				}else{
+					text=text+mass[i].lastname+" "+mass[i].firstname;
+				}
+				text=text+"\n"
+			}
+			TA.setAttribute("rows",mass.length+1);
+			TA.innerHTML=text;
+		}
+		
+		function loadCH(rb){
+			var check = document.getElementsByName(rb);
+			var val;
+			for (i=0; i<check.length;i++){
+				if(check[i].checked){
+					val=i+1;
+				}
+			}
+			if(!val){
+				alert("Выберите область заполенения")
+			}else{
+				switch(val){
+					case 1:
+						loaddata("workarea");
+						break;
+					case 2:
+						loaddataTA("textArea");
+						break;
+				}
+			}
+		}
+		
 	</script>
    <h1>Редактор табличных данных</h1>
-    <div class="col-md-4">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Firstname</th>
-					<th>Lastanme</th>
-					<th><input type="button" value="Загрузить" class="button" onclick="loaddata('workarea'); return false;"></th>
-				</tr>
-			</thead>
-			<tbody id="workarea">
-				
-			</tbody>
-		</table>
+   <div class="row tbrow">
+   	<input type="button" value="Загрузить" class="button" onclick="loadCH('check'); return false;"><br>
+   	В таблицу<input type="radio" id="check1" name="check" value="1" title="table">    
+   	В textarea<input type="radio" id="check2" name="check" value="2" title="textarea">
+   </div>
+   <div class="row tbrow">
+	   <div class="col-md-8 col-xs-12">
+	   	<div class="panel panel-default">
+	   		<div class="panel-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Firstname</th>
+							<th>Lastanme</th>					
+						</tr>
+					</thead>
+					<tbody id="workarea">
+
+					</tbody>
+				</table>
+	   		</div>
+	   	</div>
+			
+	   </div>
+	   <div class="col-md-4 col-xs-12">
+	   <div class="panel panel-default">
+	   		<div class="panel-body">
+	   			<textarea class="text-center" cols="50" id="textArea" readonly></textarea>
+	   		</div>
+	   	</div>
+	   	
+	   </div>
    </div>
     <footer class="footer text-center">
  		Тестовое задание
