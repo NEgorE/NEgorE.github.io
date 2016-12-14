@@ -167,13 +167,17 @@
 			var addFName=document.getElementById("addFName");
 			var addLName=document.getElementById("addLName");
 			var addFval=addFName.value;
-			var addLval=addLName.value;			
-			for(k=0;k<mass.length+1;k++){
-				tbody.removeChild(document.getElementById("tr"+k));
+			var addLval=addLName.value;
+			if (addFval.length==0 || addLval.length==0){
+				alert("Не все поля ввода заполнены!!!")
+			}else{
+				for(k=0;k<mass.length+1;k++){
+					tbody.removeChild(document.getElementById("tr"+k));
+				}
+				mass[mass.length]={"lastname":addLval,"firstname":addFval};		
+				load=0;
+				loaddata("workarea");
 			}
-			mass[mass.length]={"lastname":addLval,"firstname":addFval};		
-			load=0;
-			loaddata("workarea");
 		}
 		
 		function delTR(i){			
@@ -229,17 +233,18 @@
 		
 		function loaddataTA(textA){
 			var TA = document.getElementById(textA);
-			var text;
-			for (i=0;i<mass.length;i++){
+			var text = JSON.stringify(mass);
+			var pars = JSON.parse(text);
+			var str;
+			for (i=0;i<pars.length;i++){
 				if (i==0){
-					text=mass[i].lastname+" "+mass[i].firstname;
+					str=pars[i].lastname+" "+pars[i].firstname+"\n";
 				}else{
-					text=text+mass[i].lastname+" "+mass[i].firstname;
-				}
-				text=text+"\n"
+					str=str+pars[i].lastname+" "+pars[i].firstname+"\n";
+				}	
 			}
-			TA.setAttribute("rows",mass.length+1);
-			TA.innerHTML=text;
+			TA.setAttribute("rows",pars.length+1)
+			TA.innerHTML=str;
 		}
 		
 		function loadCH(rb){
@@ -272,7 +277,7 @@
    	В textarea<input type="radio" id="check2" name="check" value="2" title="textarea">
    </div>
    <div class="row tbrow">
-	   <div class="col-md-8 col-xs-12">
+	   <div class="col-md-12 col-xs-12">
 	   	<div class="panel panel-default">
 	   		<div class="panel-body">
 				<table class="table">
@@ -290,7 +295,7 @@
 	   	</div>
 			
 	   </div>
-	   <div class="col-md-4 col-xs-12">
+	   <div class="col-md-12 col-xs-12">
 	   <div class="panel panel-default">
 	   		<div class="panel-body">
 	   			<textarea class="text-center" cols="50" id="textArea" readonly></textarea>
